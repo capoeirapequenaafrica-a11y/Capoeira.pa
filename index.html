@@ -3,33 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>UnitV — Filmes, Séries e TV ao Vivo</title>
+  <title>UnitV — Filmes e Séries</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, setDoc, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyBQiyddSH2U_XivgbJxTcYRxKw4wEl242E",
-      authDomain: "tv-pequena-africa.firebaseapp.com",
-      projectId: "tv-pequena-africa",
-      storageBucket: "tv-pequena-africa.firebasestorage.app",
-      messagingSenderId: "720185325269",
-      appId: "1:720185325269:web:58f4d74e1dfc85a3bf545c"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    window.db = getFirestore(app);
-    window.FirebaseModules = { setDoc, doc, getDoc, updateDoc, collection, addDoc, getDocs };
-  </script>
-
   <style>
     :root{
       --bg:#0F0F0F; --surface:#1C1C1C; --surface2:#2A2A2A;
       --accent:#E50914; --accent-hover:#F40612; --text:#FFFFFF;
-      --text-muted:#B3B3B3; --border:#333333; --success:#10B981;
+      --text-muted:#B3B3B3; --border:#333333;
     }
     
     *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -39,7 +21,7 @@
     .navbar{position:fixed;top:0;left:0;right:0;z-index:100;background:linear-gradient(180deg,rgba(15,15,15,0.98) 0%,rgba(15,15,15,0.7) 100%);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:12px 24px}
     .nav-container{max-width:1600px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
     .logo{display:flex;align-items:center;gap:10px;cursor:pointer}
-    .logo-icon{width:40px;height:40px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center}
+    .logo-icon{width:40px;height:40px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px}
     .logo-text{font-size:24px;font-weight:800;letter-spacing:-0.5px}
     .logo-text span{color:var(--accent)}
     .nav-links{display:flex;gap:4px;align-items:center;flex-wrap:wrap}
@@ -62,28 +44,20 @@
     .btn-primary{background:#fff;color:#000;border:none;border-radius:8px;padding:10px 24px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
     .btn-secondary{background:rgba(255,255,255,0.15);color:#fff;border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:10px 20px;font-weight:600;cursor:pointer;margin-left:10px}
     
-    .section-title{font-size:20px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
-    .section-title span{width:4px;height:20px;background:var(--accent);border-radius:2px;display:inline-block;margin-right:10px}
-    .refresh-btn{background:transparent;border:1px solid var(--accent);color:var(--accent);border-radius:6px;padding:6px 12px;font-size:13px;font-weight:600;cursor:pointer}
-    .refresh-btn:hover{background:var(--accent);color:#fff}
-    .update-note{font-size:12px;color:var(--text-muted);margin-bottom:16px}
+    .section-title{font-size:20px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+    .section-title span{width:4px;height:20px;background:var(--accent);border-radius:2px;display:inline-block}
     
     .content-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:16px;margin-bottom:40px}
-    .content-row{display:flex;gap:14px;overflow-x:auto;padding-bottom:8px;margin-bottom:40px;scrollbar-width:none}
-    .content-row::-webkit-scrollbar{display:none}
     
     .card{position:relative;border-radius:12px;overflow:hidden;background:var(--surface);cursor:pointer;transition:all 0.3s ease;aspect-ratio:2/3;min-width:150px}
     .card:hover{transform:scale(1.05);box-shadow:0 8px 32px rgba(0,0,0,0.5)}
     .card-emoji{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:40px}
-    .card-info{position:absolute;bottom:0;left:0;right:0;padding:12px;background:linear-gradient(transparent,rgba(0,0,0,0.9))}
-    .card-title{font-weight:700;font-size:14px;margin-bottom:4px}
+    .card-info{position:absolute;bottom:0;left:0;right:0;padding:12px;background:linear-gradient(transparent,rgba(0,0,0,0.95))}
+    .card-title{font-weight:700;font-size:14px;margin-bottom:4px;line-height:1.3}
     .card-meta{font-size:11px;color:var(--text-muted)}
-    .card-fav{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,0.6);border:none;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:5}
+    .card-fav{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,0.6);border:none;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:5;font-size:14px}
     .card-fav.active{color:#FF4757}
     .new-badge{position:absolute;top:8px;left:8px;background:var(--accent);color:#fff;font-size:10px;font-weight:700;padding:2px 6px;border-radius:3px}
-    .progress-bar{position:absolute;bottom:0;left:0;height:3px;background:rgba(255,255,255,0.15);width:100%}
-    .progress-fill{height:100%;background:var(--accent);border-radius:0 2px 2px 0}
-    .resume-badge{position:absolute;bottom:26px;left:8px;background:var(--accent);color:#fff;font-size:10px;font-weight:600;padding:2px 5px;border-radius:3px}
     
     .category-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
     .chip{padding:6px 14px;border-radius:20px;background:var(--surface);border:1px solid var(--border);color:var(--text-muted);font-size:14px;cursor:pointer;transition:all 0.2s}
@@ -92,16 +66,13 @@
     
     .player-modal{position:fixed;inset:0;background:rgba(0,0,0,0.97);z-index:200;display:none;align-items:center;justify-content:center;padding:16px}
     .player-modal.active{display:flex}
-    .player-container{width:100%;max-width:900px;background:#000;border-radius:12px;overflow:hidden}
-    .player-screen{width:100%;aspect-ratio:16/9;background:#111;display:flex;align-items:center;justify-content:center;font-size:60px}
-    .player-info{padding:12px 16px;background:var(--surface);border-bottom:1px solid var(--border)}
-    .player-title{font-weight:700;font-size:16px}
-    .player-controls{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--surface2)}
-    .player-btn{background:transparent;border:none;color:#fff;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer}
-    .player-btn:hover{background:rgba(255,255,255,0.1)}
-    .player-progress{flex:1;height:5px;background:rgba(255,255,255,0.2);border-radius:3px;cursor:pointer}
-    .player-progress-fill{height:100%;background:var(--accent);border-radius:3px;width:0%}
-    .player-close{position:absolute;top:16px;right:16px;background:rgba(0,0,0,0.5);border:none;color:#fff;width:36px;height:36px;border-radius:50%;font-size:20px;cursor:pointer;z-index:10}
+    .player-container{width:100%;max-width:1000px;background:#000;border-radius:12px;overflow:hidden;position:relative}
+    .player-screen{width:100%;aspect-ratio:16/9;background:#111;display:flex;align-items:center;justify-content:center}
+    .player-screen video{width:100%;height:100%;object-fit:contain}
+    .player-info{padding:14px 18px;background:var(--surface);border-top:1px solid var(--border)}
+    .player-title{font-weight:700;font-size:17px}
+    .player-desc{font-size:13px;color:var(--text-muted);margin-top:4px}
+    .player-close{position:absolute;top:12px;right:12px;background:rgba(0,0,0,0.7);border:none;color:#fff;width:40px;height:40px;border-radius:50%;font-size:22px;cursor:pointer;z-index:10;display:flex;align-items:center;justify-content:center}
     
     .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--surface);border:1px solid var(--accent);color:#fff;padding:12px 20px;border-radius:8px;font-weight:600;opacity:0;transition:all 0.3s ease;z-index:300}
     .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -112,9 +83,9 @@
     @media (max-width:768px){
       .nav-links{gap:2px}
       .nav-btn{padding:8px 10px;font-size:13px}
-      .search-box{width:120px}
+      .search-box{width:120px;font-size:13px}
       .section{padding:0 16px}
-      .content-grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
+      .content-grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px}
     }
   </style>
 </head>
@@ -139,59 +110,29 @@
   </nav>
 
   <main class="main-content">
-    <!-- 🏠 INÍCIO -->
+    <!-- INÍCIO -->
     <section id="sec-inicio" class="section active">
       <div class="hero-banner">
         <div class="hero-content">
           <span class="hero-badge">DESTAQUE</span>
           <h1 class="hero-title">Bem-vindo ao UnitV</h1>
-          <p class="hero-desc">Seu catálogo de filmes e séries — sempre atualizado, de graça.</p>
+          <p class="hero-desc">Filmes reais que tocam de verdade. Clique e assista.</p>
           <button class="btn-primary" onclick="switchTab('filmes')">🎬 Ver Filmes</button>
           <button class="btn-secondary" onclick="switchTab('series')">📼 Ver Séries</button>
         </div>
       </div>
 
-      <h2 class="section-title">
-        <span></span>▶ Continuar Assistindo
-        <button class="refresh-btn" onclick="carregarContinuarAssistindo()">🔄 Atualizar</button>
-      </h2>
-      <div id="row-continuar" class="content-row">
-        <div class="empty-state" style="padding:30px">
-          <div class="empty-icon">📺</div>
-          <p>Nenhum vídeo assistido ainda. Comece a assistir e aparecerá aqui!</p>
-        </div>
-      </div>
+      <h2 class="section-title"><span></span>🎬 Lançamentos / Destaques</h2>
+      <div id="row-lancamentos" class="content-grid"></div>
 
-      <h2 class="section-title">
-        <span></span>🎬 Lançamentos Novos
-        <button class="refresh-btn" onclick="carregarFilmesNovos()">🔄 Atualizar Agora</button>
-      </h2>
-      <div class="update-note">
-        📅 Atualização automática diária — Última verificação: <span id="data-atualizacao">--/--/----</span>
-      </div>
-      <div id="row-lancamentos" class="content-grid">
-        <div style="text-align:center;padding:40px;color:var(--text-muted)">
-          <div style="font-size:30px;margin-bottom:10px">⏳</div>
-          <p>Carregando lançamentos...</p>
-        </div>
-      </div>
-
-      <h2 class="section-title">
-        <span></span>🔥 Mais Vistos
-        <button class="refresh-btn" onclick="carregarMaisVistos()">🔄 Atualizar</button>
-      </h2>
-      <div id="row-alta" class="content-grid">
-        <div style="text-align:center;padding:40px;color:var(--text-muted)">
-          <div style="font-size:30px;margin-bottom:10px">⏳</div>
-          <p>Carregando...</p>
-        </div>
-      </div>
+      <h2 class="section-title"><span></span>🔥 Todos os Filmes</h2>
+      <div id="row-alta" class="content-grid"></div>
     </section>
 
-    <!-- 🎬 FILMES -->
+    <!-- FILMES -->
     <section id="sec-filmes" class="section">
       <h1 style="font-size:26px;font-weight:800;margin-bottom:8px">🎬 Filmes</h1>
-      <p style="color:var(--text-muted);margin-bottom:20px">Catálogo atualizado automaticamente</p>
+      <p style="color:var(--text-muted);margin-bottom:20px">Clique em qualquer card para assistir</p>
       
       <div class="category-chips" id="filmes-chips">
         <span class="chip active" data-gen="todos" onclick="filtrarFilmes('todos')">Todos</span>
@@ -199,37 +140,29 @@
         <span class="chip" data-gen="comedia" onclick="filtrarFilmes('comedia')">Comédia</span>
         <span class="chip" data-gen="drama" onclick="filtrarFilmes('drama')">Drama</span>
         <span class="chip" data-gen="terror" onclick="filtrarFilmes('terror')">Terror</span>
+        <span class="chip" data-gen="ficcao" onclick="filtrarFilmes('ficcao')">Ficção</span>
       </div>
       
-      <div id="filmes-grid" class="content-grid">
-        <div style="text-align:center;padding:60px;color:var(--text-muted)">
-          <div style="font-size:30px;margin-bottom:10px">⏳</div>
-          <p>Carregando filmes...</p>
-        </div>
-      </div>
+      <div id="filmes-grid" class="content-grid"></div>
     </section>
 
-    <!-- 📼 SÉRIES -->
+    <!-- SÉRIES -->
     <section id="sec-series" class="section">
       <h1 style="font-size:26px;font-weight:800;margin-bottom:8px">📼 Séries</h1>
-      <p style="color:var(--text-muted);margin-bottom:20px">Maratone quando e onde quiser</p>
+      <p style="color:var(--text-muted);margin-bottom:20px">Episódios disponíveis</p>
       
       <div class="category-chips" id="series-chips">
         <span class="chip active" data-gen="todos" onclick="filtrarSeries('todos')">Todos</span>
         <span class="chip" data-gen="drama" onclick="filtrarSeries('drama')">Drama</span>
         <span class="chip" data-gen="comedia" onclick="filtrarSeries('comedia')">Comédia</span>
         <span class="chip" data-gen="suspense" onclick="filtrarSeries('suspense')">Suspense</span>
+        <span class="chip" data-gen="acao" onclick="filtrarSeries('acao')">Ação</span>
       </div>
       
-      <div id="series-grid" class="content-grid">
-        <div style="text-align:center;padding:60px;color:var(--text-muted)">
-          <div style="font-size:30px;margin-bottom:10px">⏳</div>
-          <p>Carregando séries...</p>
-        </div>
-      </div>
+      <div id="series-grid" class="content-grid"></div>
     </section>
 
-    <!-- ❤️ FAVORITOS -->
+    <!-- FAVORITOS -->
     <section id="sec-favoritos" class="section">
       <h1 style="font-size:26px;font-weight:800;margin-bottom:8px">❤️ Meus Favoritos</h1>
       <p style="color:var(--text-muted);margin-bottom:20px">Seu conteúdo salvo</p>
@@ -243,21 +176,18 @@
     </section>
   </main>
 
-  <!-- 🎬 PLAYER -->
+  <!-- PLAYER -->
   <div id="player-modal" class="player-modal">
     <button class="player-close" onclick="fecharPlayer()">×</button>
     <div class="player-container">
-      <div class="player-screen" id="player-screen">▶️</div>
-      <div class="player-info">
-        <div class="player-title" id="player-title">Título do Vídeo</div>
-        <div style="font-size:12px;color:var(--text-muted);margin-top:4px" id="player-meta">--</div>
+      <div class="player-screen">
+        <video id="videoPlayer" controls playsinline preload="metadata">
+          Seu navegador não suporta vídeo.
+        </video>
       </div>
-      <div class="player-controls">
-        <button class="player-btn" id="play-btn" onclick="togglePlay()">▶</button>
-        <div class="player-progress" onclick="seekVideo(event)">
-          <div class="player-progress-fill" id="progress-fill"></div>
-        </div>
-        <span style="font-size:12px;color:var(--text-muted)" id="player-time">0:00</span>
+      <div class="player-info">
+        <div class="player-title" id="player-title">Título</div>
+        <div class="player-desc" id="player-desc"></div>
       </div>
     </div>
   </div>
@@ -265,455 +195,310 @@
   <div id="toast" class="toast"></div>
 
   <script>
-    // ==================================================
-    // 🔧 CONFIGURAÇÕES GLOBAIS
-    // ==================================================
+    // ============================================
+    //  AQUI VOCÊ ADICIONA OS FILMES
+    //  Basta copiar um objeto e mudar os dados
+    // ============================================
+    const filmes = [
+      {
+        id: 'f1',
+        titulo: 'Big Buck Bunny',
+        ano: 2008,
+        genero: 'comedia',
+        duracao: '10min',
+        novo: true,
+        desc: 'Clássico open-source da Blender Foundation. Um coelho se vinga.',
+        videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'
+      },
+      {
+        id: 'f2',
+        titulo: 'Elephant Dream',
+        ano: 2006,
+        genero: 'drama',
+        duracao: '11min',
+        novo: true,
+        desc: 'O primeiro filme open-source da história.',
+        videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4'
+      },
+      {
+        id: 'f3',
+        titulo: 'Sintel',
+        ano: 2010,
+        genero: 'acao',
+        duracao: '15min',
+        novo: false,
+        desc: 'Aventura épica de uma jovem em busca do seu dragão.',
+        videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4'
+      },
+      {
+        id: 'f4',
+        titulo: 'Tears of Steel',
+        ano: 2012,
+        genero: 'ficcao',
+        duracao: '12min',
+        novo: false,
+        desc: 'Ficção científica com robots em Amsterdã. Blender Foundation.',
+        videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4'
+      },
+      {
+        id: 'f5',
+        titulo: 'For Bigger Blazes',
+        ano: 2014,
+        genero: 'acao',
+        duracao: '15s',
+        novo: true,
+        desc: 'Ação intensa — comercial Chromecast.',
+        videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4'
+      },
+      {
+        id: 'f6',
+        titulo: 'For Bigger Escapes',
+        ano: 2012,
+        genero: 'acao',
+        duracao: '15s',
+        novo: false,
+        desc: 'Fuga épica e adrenalina.',
+        videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4'
+      },
+      {
+        id: 'f7',
+        titulo: 'For Bigger Fun',
+        ano: 2012,
+        genero: 'comedia',
+        duracao: '15s',
+        novo: false,
+        desc: 'Diversão garantida.',
+        videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4'
+      },
+      {
+        id: 'f8',
+        titulo: 'We Are Going On Bullrun',
+        ano: 2015,
+        genero: 'acao',
+        duracao: '10min',
+        novo: true,
+        desc: 'Corrida selvagem e adrenalina.',
+        videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4'
+      },
+      {
+        id: 'f9',
+        titulo: 'Night of the Living Dead',
+        ano: 1968,
+        genero: 'terror',
+        duracao: '96min',
+        novo: true,
+        desc: 'O filme que inventou os zumbis modernos. George A. Romero. Domínio Público.',
+        videoUrl: 'https://archive.org/download/Public_Domain_Theatre_-_Night_of_the_Living_Dead/Public_Domain_Theatre_-_Night_of_the_Living_Dead.mp4'
+      },
+      {
+        id: 'f10',
+        titulo: 'Sintel Trailer',
+        ano: 2010,
+        genero: 'acao',
+        duracao: '52s',
+        novo: false,
+        desc: 'Trailer oficial do épico Sintel.',
+        videoUrl: 'https://media.w3.org/2010/05/sintel/trailer.mp4'
+      }
+    ];
+
+    // ============================================
+    //  AQUI VOCÊ ADICIONA AS SÉRIES
+    // ============================================
+    const series = [
+      {
+        id: 's1',
+        titulo: 'Subaru Outback',
+        temporadas: 1,
+        genero: 'suspense',
+        episodios: 1,
+        novo: true,
+        desc: 'Demonstração off-road com adrenalina.',
+        videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4'
+      },
+      {
+        id: 's2',
+        titulo: 'Big Buck Bunny (Episódio)',
+        temporadas: 1,
+        genero: 'comedia',
+        episodios: 1,
+        novo: false,
+        desc: 'Versão em episódio do clássico.',
+        videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'
+      },
+      {
+        id: 's3',
+        titulo: 'Tears of Steel',
+        temporadas: 1,
+        genero: 'acao',
+        episodios: 1,
+        novo: false,
+        desc: 'Ficção científica open-source.',
+        videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4'
+      }
+    ];
+
+    // ============================================
+    //  NÃO PRECISA MEXER ABAIXO (lógica do app)
+    // ============================================
     let currentTab = 'inicio';
     let currentFilmeGen = 'todos';
     let currentSerieGen = 'todos';
     let searchTerm = '';
     let favoritos = {};
-    let progresso = {};
-    let playerAberto = false;
-    let tempoAtual = 0;
-    let duracaoTotal = 100;
-    let timerProgresso = null;
-    let todosFilmes = [];
-    let todosSeries = [];
 
-    // ==================================================
-    // 🔧 NAVEGAÇÃO
-    // ==================================================
-    function switchTab(tab){
+    function switchTab(tab) {
       currentTab = tab;
-      
       document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
       document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-      
       document.getElementById('sec-' + tab).classList.add('active');
-      document.querySelector(`.nav-btn[data-tab="${tab}"]`).classList.add('active');
+      document.querySelector('.nav-btn[data-tab="' + tab + '"]').classList.add('active');
       
-      if(tab === 'inicio') carregarDadosInicio();
-      if(tab === 'filmes') carregarFilmes();
-      if(tab === 'series') carregarSeries();
-      if(tab === 'favoritos') carregarFavoritos();
+      if (tab === 'inicio') carregarDadosInicio();
+      if (tab === 'filmes') carregarFilmes();
+      if (tab === 'series') carregarSeries();
+      if (tab === 'favoritos') carregarFavoritos();
     }
 
-    function showToast(msg){
+    function showToast(msg) {
       const t = document.getElementById('toast');
       t.textContent = msg;
       t.classList.add('show');
       setTimeout(() => t.classList.remove('show'), 2500);
     }
 
-    function doSearch(val){
+    function doSearch(val) {
       searchTerm = val.toLowerCase();
-      if(currentTab === 'filmes') carregarFilmes();
-      if(currentTab === 'series') carregarSeries();
+      if (currentTab === 'filmes') carregarFilmes();
+      if (currentTab === 'series') carregarSeries();
     }
 
-    // ==================================================
-    // 🔥 FIREBASE — CARREGAR DADOS
-    // ==================================================
-    async function carregarFilmesDoFirebase(){
-      if(!window.db || !window.FirebaseModules){
-        console.log('⚠️ Firebase não carregado, usando dados de exemplo');
-        return getFilmesExemplo();
-      }
-      try{
-        const { collection, getDocs } = window.FirebaseModules;
-        const snapshot = await getDocs(collection(window.db, 'filmes'));
-        if(snapshot.empty){
-          console.log('⚠️ Nenhum filme no Firebase, usando exemplos');
-          return getFilmesExemplo();
-        }
-        return snapshot.docs.map(doc => ({id: doc.id, ...doc.data()}));
-      }catch(e){
-        console.log('⚠️ Erro ao carregar filmes:', e.message);
-        return getFilmesExemplo();
-      }
-    }
-
-    async function carregarSeriesDoFirebase(){
-      if(!window.db || !window.FirebaseModules){
-        return getSeriesExemplo();
-      }
-      try{
-        const { collection, getDocs } = window.FirebaseModules;
-        const snapshot = await getDocs(collection(window.db, 'series'));
-        if(snapshot.empty){
-          return getSeriesExemplo();
-        }
-        return snapshot.docs.map(doc => ({id: doc.id, ...doc.data()}));
-      }catch(e){
-        console.log('⚠️ Erro ao carregar séries:', e.message);
-        return getSeriesExemplo();
-      }
-    }
-
-    // Dados de exemplo enquanto o Firebase não está populado
-    function getFilmesExemplo(){
-      return [
-        {id:'f1',titulo:'O Último Horizonte',ano:2025,genero:'acao',duracao:'2h 15m',novo:true,desc:'Uma jornada épica por mundos desconhecidos'},
-        {id:'f2',titulo:'Coração de Areia',ano:2025,genero:'drama',duracao:'1h 52m',novo:true,desc:'Uma história emocionante de superação'},
-        {id:'f3',titulo:'Operação Aurora',ano:2024,genero:'acao',duracao:'2h 08m',novo:false,desc:'Missão de resgate internacional'},
-        {id:'f4',titulo:'Risos no Escuro',ano:2024,genero:'comedia',duracao:'1h 45m',novo:false,desc:'Comédia para toda a família'},
-        {id:'f5',titulo:'A Noite Sem Fim',ano:2025,genero:'terror',duracao:'1h 58m',novo:true,desc:'O terror está apenas começando'},
-        {id:'f6',titulo:'Caminhos Cruzados',ano:2024,genero:'drama',duracao:'2h 02m',novo:false,desc:'Vidas que se encontram e se separam'},
-      ];
-    }
-
-    function getSeriesExemplo(){
-      return [
-        {id:'s1',titulo:'Cidade Oculta',temporadas:3,genero:'suspense',episodios:30,novo:true,desc:'Segredos escondidos em uma pequena cidade'},
-        {id:'s2',titulo:'Sala de Espera',temporadas:4,genero:'comedia',episodios:48,novo:false,desc:'Vida caótica de um hospital'},
-        {id:'s3',titulo:'Mentes Brilhantes',temporadas:5,genero:'drama',episodios:55,novo:true,desc:'Inteligência, paixão e conflitos'},
-        {id:'s4',titulo:'Vizinhos',temporadas:2,genero:'comedia',episodios:20,novo:false,desc:'Risadas garantidas na rua de baixo'},
-      ];
-    }
-
-    // ==================================================
-    // 📊 PROGRESSO E FAVORITOS
-    // ==================================================
-    async function salvarProgresso(tipo, id, titulo, tempo, duracao){
-      const porcentagem = Math.round((tempo / duracao) * 100) || 0;
-      
-      // Salvar localmente
-      progresso[id] = { tipo, id, titulo, tempo, duracao, porcentagem };
-      localStorage.setItem('unitv_progresso', JSON.stringify(progresso));
-      
-      // Salvar no Firebase
-      if(window.db && window.FirebaseModules){
-        try{
-          const { setDoc, doc } = window.FirebaseModules;
-          await setDoc(doc(window.db, 'progresso', id), {
-            tipo, id, titulo, tempo, duracao, porcentagem,
-            ultimaVisualizacao: new Date()
-          });
-        }catch(e){
-          console.log('⚠️ Progresso salvo apenas localmente');
-        }
-      }
-    }
-
-    async function carregarProgressoLocal(){
-      try{
-        const salvo = localStorage.getItem('unitv_progresso');
-        if(salvo) progresso = JSON.parse(salvo);
-      }catch(e){ progresso = {}; }
-    }
-
-    async function toggleFav(tipo, id, titulo){
-      const chave = `${tipo}_${id}`;
+    function toggleFav(tipo, id) {
+      const chave = tipo + '_' + id;
       favoritos[chave] = !favoritos[chave];
       localStorage.setItem('unitv_favoritos', JSON.stringify(favoritos));
-      atualizarContadorFavs();
+      document.getElementById('favCount').textContent = Object.keys(favoritos).filter(k => favoritos[k]).length;
       showToast(favoritos[chave] ? '❤️ Adicionado aos favoritos' : '💔 Removido dos favoritos');
-      if(currentTab === 'favoritos') carregarFavoritos();
+      if (currentTab === 'favoritos') carregarFavoritos();
+      if (currentTab === 'filmes') carregarFilmes();
+      if (currentTab === 'series') carregarSeries();
+      if (currentTab === 'inicio') carregarDadosInicio();
     }
 
-    function atualizarContadorFavs(){
-      document.getElementById('favCount').textContent = Object.keys(favoritos).length;
+    function abrirPlayer(item) {
+      const modal = document.getElementById('player-modal');
+      const video = document.getElementById('videoPlayer');
+      document.getElementById('player-title').textContent = item.titulo;
+      document.getElementById('player-desc').textContent = item.desc || '';
+      video.src = item.videoUrl;
+      modal.classList.add('active');
+      video.play().catch(() => {});
+      showToast('▶️ ' + item.titulo);
     }
 
-    // ==================================================
-    // 🎬 PLAYER
-    // ==================================================
-    function abrirPlayer(tipo, item){
-      playerAberto = true;
-      document.getElementById('player-modal').classList.add('active');
-      document.getElementById('player-title').textContent = item.titulo || item.nome;
-      document.getElementById('player-meta').textContent = `${item.ano || item.temporadas + ' Temporadas'} · ${item.duracao || item.episodios + ' Episódios'}`;
+    function fecharPlayer() {
+      const modal = document.getElementById('player-modal');
+      const video = document.getElementById('videoPlayer');
+      video.pause();
+      video.src = '';
+      modal.classList.remove('active');
+    }
+
+    function criarCard(item, tipo) {
+      const ehFav = favoritos[tipo + '_' + item.id];
+      const meta = item.ano 
+        ? item.ano + ' · ' + item.duracao
+        : item.temporadas + ' Temp · ' + item.episodios + ' Ep';
       
-      const prog = progresso[item.id];
-      tempoAtual = prog ? prog.tempo : 0;
-      duracaoTotal = prog ? prog.duracao : 100;
-      atualizarBarraProgresso();
+      return '<div class="card" onclick=\'abrirPlayer(' + JSON.stringify(item).replace(/'/g, "\\'") + ')\'>' +
+        (item.novo ? '<span class="new-badge">NOVO</span>' : '') +
+        '<button class="card-fav ' + (ehFav ? 'active' : '') + '" onclick="event.stopPropagation();toggleFav(\'' + tipo + '\',\'' + item.id + '\')">❤️</button>' +
+        '<div class="card-emoji">▶️</div>' +
+        '<div class="card-info">' +
+          '<div class="card-title">' + item.titulo + '</div>' +
+          '<div class="card-meta">' + meta + '</div>' +
+        '</div>' +
+      '</div>';
+    }
+
+    function carregarDadosInicio() {
+      const novos = filmes.filter(f => f.novo);
+      document.getElementById('row-lancamentos').innerHTML = novos.map(f => criarCard(f, 'filmes')).join('') || '<p style="color:var(--text-muted)">Nenhum lançamento</p>';
+      document.getElementById('row-alta').innerHTML = filmes.map(f => criarCard(f, 'filmes')).join('');
+    }
+
+    function carregarFilmes() {
+      let lista = filmes;
+      if (currentFilmeGen !== 'todos') lista = lista.filter(f => f.genero === currentFilmeGen);
+      if (searchTerm) lista = lista.filter(f => f.titulo.toLowerCase().includes(searchTerm));
       
-      iniciarSimulacaoPlayer(tipo, item);
-    }
-
-    function fecharPlayer(){
-      playerAberto = false;
-      pararSimulacaoPlayer();
-      document.getElementById('player-modal').classList.remove('active');
-    }
-
-    function togglePlay(){
-      if(timerProgresso){
-        pararSimulacaoPlayer();
-        document.getElementById('play-btn').textContent = '▶';
-      }else{
-        document.getElementById('play-btn').textContent = '⏸';
-        iniciarContadorPlayer();
-      }
-    }
-
-    function iniciarContadorPlayer(){
-      timerProgresso = setInterval(() => {
-        tempoAtual++;
-        if(tempoAtual >= duracaoTotal){
-          pararSimulacaoPlayer();
-          tempoAtual = duracaoTotal;
-        }
-        atualizarBarraProgresso();
-      }, 1000);
-    }
-
-    function pararSimulacaoPlayer(){
-      clearInterval(timerProgresso);
-      timerProgresso = null;
-    }
-
-    function iniciarSimulacaoPlayer(tipo, item){
-      pararSimulacaoPlayer();
-      document.getElementById('play-btn').textContent = '⏸';
-      timerProgresso = setInterval(() => {
-        tempoAtual++;
-        if(tempoAtual >= duracaoTotal){
-          pararSimulacaoPlayer();
-          tempoAtual = duracaoTotal;
-          document.getElementById('play-btn').textContent = '▶';
-        }
-        atualizarBarraProgresso();
-        if(tempoAtual % 10 === 0){
-          salvarProgresso(tipo, item.id, item.titulo, tempoAtual, duracaoTotal);
-        }
-      }, 1000);
-    }
-
-    function atualizarBarraProgresso(){
-      const porcentagem = duracaoTotal > 0 ? (tempoAtual / duracaoTotal) * 100 : 0;
-      document.getElementById('progress-fill').style.width = porcentagem + '%';
-      const min = Math.floor(tempoAtual / 60);
-      const sec = String(tempoAtual % 60).padStart(2, '0');
-      document.getElementById('player-time').textContent = `${min}:${sec}`;
-    }
-
-    function seekVideo(e){
-      const rect = e.target.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const porcentagem = x / rect.width;
-      tempoAtual = Math.round(porcentagem * duracaoTotal);
-      atualizarBarraProgresso();
-    }
-
-    // ==================================================
-    // 📊 RENDERIZAÇÃO DOS CARDS
-    // ==================================================
-    function criarCard(item, tipo){
-      const ehFav = favoritos[`${tipo}_${item.id}`];
-      const prog = progresso[item.id];
-      const temProgresso = prog && prog.porcentagem > 5 && prog.porcentagem < 95;
-      
-      return `
-        <div class="card" onclick='abrirPlayer("${tipo}", ${JSON.stringify(item)})'>
-          ${item.novo ? '<span class="new-badge">NOVO</span>' : ''}
-          ${temProgresso ? '<span class="resume-badge">▶ Continuar</span>' : ''}
-          <button class="card-fav ${ehFav ? 'active' : ''}" onclick="event.stopPropagation();toggleFav('${tipo}','${item.id}','${item.titulo}')">❤️</button>
-          <div class="card-emoji">${tipo === 'filmes' ? '🎬' : '📼'}</div>
-          <div class="card-info">
-            <div class="card-title">${item.titulo}</div>
-            <div class="card-meta">${item.ano || item.temporadas + ' Temporadas'} · ${item.duracao || item.episodios + ' Episódios'}</div>
-          </div>
-          ${temProgresso ? `
-            <div class="progress-bar">
-              <div class="progress-fill" style="width:${prog.porcentagem}%"></div>
-            </div>
-          ` : ''}
-        </div>
-      `;
-    }
-
-    // ==================================================
-    // 🏠 PÁGINA INICIAL
-    // ==================================================
-    async function carregarDadosInicio(){
-      todosFilmes = await carregarFilmesDoFirebase();
-      todosSeries = await carregarSeriesDoFirebase();
-      
-      carregarFilmesNovos();
-      carregarMaisVistos();
-      carregarContinuarAssistindo();
-      atualizarDataAtualizacao();
-    }
-
-    function carregarFilmesNovos(){
-      const novos = todosFilmes.filter(f => f.novo).slice(0,6);
-      const html = novos.map(f => criarCard(f, 'filmes')).join('');
-      document.getElementById('row-lancamentos').innerHTML = html;
-      showToast('✅ Lançamentos atualizados');
-      atualizarDataAtualizacao();
-    }
-
-    function carregarMaisVistos(){
-      const html = todosFilmes.slice(0,6).map(f => criarCard(f, 'filmes')).join('');
-      document.getElementById('row-alta').innerHTML = html;
-    }
-
-    function carregarContinuarAssistindo(){
-      const itens = Object.values(progresso).slice(0,6);
-      if(itens.length === 0){
-        document.getElementById('row-continuar').innerHTML = `
-          <div class="empty-state" style="padding:30px">
-            <div class="empty-icon">📺</div>
-            <p>Nenhum vídeo assistido ainda. Comece a assistir e aparecerá aqui!</p>
-          </div>
-        `;
+      if (lista.length === 0) {
+        document.getElementById('filmes-grid').innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">🔍</div><h3>Nenhum filme encontrado</h3></div>';
         return;
       }
-      const html = itens.map(p => {
-        return `
-          <div class="card" style="min-width:200px" onclick='abrirPlayer("${p.tipo}", ${JSON.stringify({id:p.id, titulo:p.titulo, duracao:`${Math.round(p.porcentagem)}% assistido`})})'>
-            <span class="resume-badge">▶ Continuar</span>
-            <div class="card-emoji">📺</div>
-            <div class="card-info">
-              <div class="card-title">${p.titulo}</div>
-              <div class="card-meta">${Math.round(p.porcentagem)}% concluído</div>
-            </div>
-            <div class="progress-bar">
-              <div class="progress-fill" style="width:${p.porcentagem}%"></div>
-            </div>
-          </div>
-        `;
-      }).join('');
-      document.getElementById('row-continuar').innerHTML = html;
+      document.getElementById('filmes-grid').innerHTML = lista.map(f => criarCard(f, 'filmes')).join('');
     }
 
-    function atualizarDataAtualizacao(){
-      const hoje = new Date();
-      const dataStr = String(hoje.getDate()).padStart(2,'0') + '/' + 
-                      String(hoje.getMonth()+1).padStart(2,'0') + '/' + 
-                      hoje.getFullYear();
-      document.getElementById('data-atualizacao').textContent = dataStr;
-      localStorage.setItem('unitv_ultimaVerificacao', dataStr);
-    }
-
-    // ==================================================
-    // 🎬 ABA FILMES
-    // ==================================================
-    function carregarFilmes(){
-      let filtrados = todosFilmes;
-      
-      if(currentFilmeGen !== 'todos'){
-        filtrados = filtrados.filter(f => f.genero === currentFilmeGen);
-      }
-      
-      if(searchTerm){
-        filtrados = filtrados.filter(f => 
-          f.titulo.toLowerCase().includes(searchTerm) ||
-          String(f.ano).includes(searchTerm)
-        );
-      }
-      
-      if(filtrados.length === 0){
-        document.getElementById('filmes-grid').innerHTML = `
-          <div class="empty-state" style="grid-column:1/-1">
-            <div class="empty-icon">🔍</div>
-            <h3>Nenhum filme encontrado</h3>
-            <p>Tente outro termo de busca</p>
-          </div>
-        `;
-        return;
-      }
-      
-      document.getElementById('filmes-grid').innerHTML = filtrados.map(f => criarCard(f, 'filmes')).join('');
-    }
-
-    function filtrarFilmes(genero){
+    function filtrarFilmes(genero) {
       currentFilmeGen = genero;
       document.querySelectorAll('#filmes-chips .chip').forEach(c => c.classList.remove('active'));
-      document.querySelector(`#filmes-chips [data-gen="${genero}"]`).classList.add('active');
+      document.querySelector('#filmes-chips [data-gen="' + genero + '"]').classList.add('active');
       carregarFilmes();
     }
 
-    // ==================================================
-    // 📼 ABA SÉRIES
-    // ==================================================
-    function carregarSeries(){
-      let filtrados = todosSeries;
+    function carregarSeries() {
+      let lista = series;
+      if (currentSerieGen !== 'todos') lista = lista.filter(s => s.genero === currentSerieGen);
+      if (searchTerm) lista = lista.filter(s => s.titulo.toLowerCase().includes(searchTerm));
       
-      if(currentSerieGen !== 'todos'){
-        filtrados = filtrados.filter(s => s.genero === currentSerieGen);
-      }
-      
-      if(searchTerm){
-        filtrados = filtrados.filter(s => 
-          s.titulo.toLowerCase().includes(searchTerm)
-        );
-      }
-      
-      if(filtrados.length === 0){
-        document.getElementById('series-grid').innerHTML = `
-          <div class="empty-state" style="grid-column:1/-1">
-            <div class="empty-icon">🔍</div>
-            <h3>Nenhuma série encontrada</h3>
-            <p>Tente outro termo de busca</p>
-          </div>
-        `;
+      if (lista.length === 0) {
+        document.getElementById('series-grid').innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">🔍</div><h3>Nenhuma série encontrada</h3></div>';
         return;
       }
-      
-      document.getElementById('series-grid').innerHTML = filtrados.map(s => criarCard(s, 'series')).join('');
+      document.getElementById('series-grid').innerHTML = lista.map(s => criarCard(s, 'series')).join('');
     }
 
-    function filtrarSeries(genero){
+    function filtrarSeries(genero) {
       currentSerieGen = genero;
       document.querySelectorAll('#series-chips .chip').forEach(c => c.classList.remove('active'));
-      document.querySelector(`#series-chips [data-gen="${genero}"]`).classList.add('active');
+      document.querySelector('#series-chips [data-gen="' + genero + '"]').classList.add('active');
       carregarSeries();
     }
 
-    // ==================================================
-    // ❤️ ABA FAVORITOS
-    // ==================================================
-    function carregarFavoritos(){
-      const itensFav = [];
-      
+    function carregarFavoritos() {
+      const itens = [];
       Object.keys(favoritos).forEach(chave => {
-        if(favoritos[chave]){
-          const [tipo, id] = chave.split('_');
-          const lista = tipo === 'filmes' ? todosFilmes : todosSeries;
+        if (favoritos[chave]) {
+          const parts = chave.split('_');
+          const tipo = parts[0];
+          const id = parts[1];
+          const lista = tipo === 'filmes' ? filmes : series;
           const item = lista.find(i => i.id === id);
-          if(item) itensFav.push({...item, tipo});
+          if (item) itens.push(Object.assign({}, item, { tipo: tipo }));
         }
       });
       
-      if(itensFav.length === 0){
-        document.getElementById('favoritos-grid').innerHTML = `
-          <div class="empty-state">
-            <div class="empty-icon">📭</div>
-            <h3 style="font-size:18px;margin-bottom:8px">Nenhum favorito ainda</h3>
-            <p>Toque no ❤️ em qualquer título para salvar aqui.</p>
-          </div>
-        `;
+      if (itens.length === 0) {
+        document.getElementById('favoritos-grid').innerHTML = 
+          '<div class="empty-state">' +
+            '<div class="empty-icon">📭</div>' +
+            '<h3 style="font-size:18px;margin-bottom:8px">Nenhum favorito ainda</h3>' +
+            '<p>Toque no ❤️ em qualquer título para salvar aqui.</p>' +
+          '</div>';
         return;
       }
-      
-      document.getElementById('favoritos-grid').innerHTML = `
-        <div class="content-grid">
-          ${itensFav.map(item => criarCard(item, item.tipo)).join('')}
-        </div>
-      `;
+      document.getElementById('favoritos-grid').innerHTML = '<div class="content-grid">' + itens.map(i => criarCard(i, i.tipo)).join('') + '</div>';
     }
 
-    // ==================================================
-    // 🚀 INICIALIZAÇÃO
-    // ==================================================
-    async function inicializar(){
-      console.log('🚀 UnitV Iniciando...');
+    function inicializar() {
+      try {
+        const salvos = localStorage.getItem('unitv_favoritos');
+        if (salvos) favoritos = JSON.parse(salvos);
+      } catch (e) { favoritos = {}; }
       
-      try{
-        const favSalvos = localStorage.getItem('unitv_favoritos');
-        if(favSalvos) favoritos = JSON.parse(favSalvos);
-      }catch(e){ favoritos = {}; }
-      
-      await carregarProgressoLocal();
-      atualizarContadorFavs();
+      document.getElementById('favCount').textContent = Object.keys(favoritos).filter(k => favoritos[k]).length;
       carregarDadosInicio();
-      
-      console.log('✅ UnitV Pronto!');
-      showToast('✅ UnitV carregado com sucesso!');
+      showToast('✅ UnitV pronto! Clique em um filme');
     }
 
     inicializar();
