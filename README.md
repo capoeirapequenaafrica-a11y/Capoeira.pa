@@ -1,2 +1,2 @@
 # Capoeira.pa
-A aulaS de capoeira 
+jogos simulador 
